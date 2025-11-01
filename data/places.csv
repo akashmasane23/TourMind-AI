@@ -1,0 +1,87 @@
+city,state,place_name,latitude,longitude,description_keyword,activity_type
+Goa,Goa,Baga Beach,15.5654,73.7547,beach,beaches
+Goa,Goa,Fort Aguada,15.4988,73.7744,fort,forts
+Goa,Goa,Dudhsagar Falls,15.3145,74.2259,waterfall,mountains
+Goa,Goa,Chapora Fort,15.6021,73.7291,fort,forts
+Goa,Goa,Anjuna Beach,15.5843,73.7436,beach,beaches
+Rajasthan,Rajasthan,Amber Fort,26.9854,75.8510,fort,forts
+Rajasthan,Rajasthan,City Palace Jaipur,26.9250,75.8235,palace,historical
+Rajasthan,Rajasthan,Udaipur City Palace,24.5771,73.6836,palace,historical
+Rajasthan,Rajasthan,Mehrangarh Fort,26.2974,73.0182,fort,forts
+Rajasthan,Rajasthan,Pushkar Lake,26.4805,74.5516,lake,religious
+Kerala,Kerala,Alleppey Backwaters,9.4981,76.3388,backwaters,nature
+Kerala,Kerala,Munnar,10.0889,77.0596,hill station,mountains
+Kerala,Kerala,Kochi Fort,9.9662,76.2413,historical,historical
+Kerala,Kerala,Varkala Beach,8.7397,76.7153,beach,beaches
+Kerala,Kerala,Periyar National Park,9.6053,77.1648,wildlife,nature
+Maharashtra,Maharashtra,Gateway of India,18.9219,72.8347,monument,historical
+Maharashtra,Maharashtra,Ajanta Caves,20.5510,75.7032,caves,historical
+Maharashtra,Maharashtra,Shirdi Saibaba Temple,19.7644,74.4770,temple,religious
+Maharashtra,Maharashtra,Lonavala,18.7562,73.4079,hill station,mountains
+Maharashtra,Maharashtra,Mahabaleshwar,17.9238,73.6586,hill station,mountains
+Delhi,Delhi,India Gate,28.6129,77.2295,monument,historical
+Delhi,Delhi,Qutub Minar,28.5245,77.1855,monument,historical
+Delhi,Delhi,Humayun's Tomb,28.5933,77.2507,tomb,historical
+Delhi,Delhi,Red Fort,28.6562,77.2410,fort,historical
+Delhi,Delhi,Lotus Temple,28.5535,77.2588,temple,religious
+Uttar Pradesh,Uttar Pradesh,Taj Mahal,27.1751,78.0421,monument,historical
+Uttar Pradesh,Uttar Pradesh,Agra Fort,27.1799,78.0210,fort,historical
+Uttar Pradesh,Uttar Pradesh,Varanasi Ghats,25.3176,82.9739,river bank,religious
+Uttar Pradesh,Uttar Pradesh,Sarnath,25.3734,83.0232,buddhist,religious
+Uttar Pradesh,Uttar Pradesh,Bankey Bihari Temple,27.5701,77.6702,temple,religious
+West Bengal,West Bengal,Victoria Memorial,22.5448,88.3426,memorial,historical
+West Bengal,West Bengal,Howrah Bridge,22.5760,88.3463,bridge,city
+West Bengal,West Bengal,Dakshineswar Kali Temple,22.6548,88.3576,temple,religious
+West Bengal,West Bengal,Sundarbans National Park,21.9443,89.1969,wildlife,nature
+West Bengal,West Bengal,Kalighat Kali Temple,22.5181,88.3475,temple,religious
+Karnataka,Karnataka,Mysore Palace,12.3052,76.6559,palace,historical
+Karnataka,Karnataka,Hampi,15.3350,76.4601,ruins,historical
+Karnataka,Karnataka,Cubbon Park,12.9762,77.5925,park,nature
+Karnataka,Karnataka,Lal Bagh,12.9482,77.5852,garden,nature
+Karnataka,Karnataka,Coorg,12.4208,75.7369,hill station,mountains
+Tamil Nadu,Tamil Nadu,Marina Beach,13.0475,80.2825,beach,beaches
+Tamil Nadu,Tamil Nadu,Meenakshi Amman Temple,9.9197,78.1194,temple,religious
+Tamil Nadu,Tamil Nadu,Mahabalipuram,12.6200,80.1900,temple,historical
+Tamil Nadu,Tamil Nadu,Kodaikanal,10.2333,77.4833,hill station,mountains
+Tamil Nadu,Tamil Nadu,Rameswaram Temple,9.2858,79.3174,temple,religious
+Gujarat,Gujarat,Sabarmati Ashram,23.0610,72.5804,ashram,historical
+Gujarat,Gujarat,Rann of Kutch,23.7337,70.5701,desert,nature
+Gujarat,Gujarat,Dwarkadhish Temple,22.3842,68.9687,temple,religious
+Gujarat,Gujarat,Statue of Unity,21.8385,73.7191,statue,historical
+Gujarat,Gujarat,Gir National Park,21.0850,70.8200,wildlife,nature
+Himachal Pradesh,Himachal Pradesh,Shimla,31.1048,77.1734,hill station,mountains
+Himachal Pradesh,Himachal Pradesh,Manali,32.2432,77.1892,hill station,mountains
+Himachal Pradesh,Himachal Pradesh,Dharamshala,32.2185,76.3210,hill station,mountains
+Himachal Pradesh,Himachal Pradesh,Kullu Valley,31.9566,77.1097,valley,mountains
+Himachal Pradesh,Himachal Pradesh,Rohtang Pass,32.3789,77.2590,pass,mountains
+Jammu & Kashmir,Jammu & Kashmir,Dal Lake,34.0900,74.8390,lake,nature
+Jammu & Kashmir,Jammu & Kashmir,Gulmarg,34.0489,74.3800,hill station,mountains
+Jammu & Kashmir,Jammu & Kashmir,Pahalgam,34.0200,75.1900,valley,mountains
+Jammu & Kashmir,Jammu & Kashmir,Vaishno Devi Temple,33.0298,74.9452,temple,religious
+Jammu & Kashmir,Jammu & Kashmir,Shalimar Bagh,34.1165,74.8384,garden,historical
+Uttarakhand,Uttarakhand,Rishikesh,30.0869,78.2676,pilgrimage,religious
+Uttarakhand,Uttarakhand,Haridwar,29.9457,78.1642,pilgrimage,religious
+Uttarakhand,Uttarakhand,Nainital,29.3919,79.4542,hill station,mountains
+Uttarakhand,Uttarakhand,Jim Corbett National Park,29.5300,78.7800,wildlife,nature
+Uttarakhand,Uttarakhand,Badrinath Temple,30.7400,79.4900,pilgrimage,religious
+Punjab,Punjab,Golden Temple,31.6200,74.8765,temple,religious
+Punjab,Punjab,Jallianwala Bagh,31.6200,74.8765,historical,historical
+Punjab,Punjab,Wagah Border,31.5794,74.5292,border,historical
+Punjab,Punjab,Anandpur Sahib,31.2333,76.5000,pilgrimage,religious
+Madhya Pradesh,Madhya Pradesh,Khajuraho Temples,24.8500,79.9300,temple,historical
+Madhya Pradesh,Madhya Pradesh,Sanchi Stupa,23.4794,77.7262,buddhist,historical
+Madhya Pradesh,Madhya Pradesh,Bandhavgarh National Park,23.7297,80.9972,wildlife,nature
+Madhya Pradesh,Madhya Pradesh,Gwalior Fort,26.2124,78.1678,fort,historical
+Odisha,Odisha,Puri Jagannath Temple,19.8049,85.8339,temple,religious
+Odisha,Odisha,Konark Sun Temple,19.8876,86.0945,temple,historical
+Odisha,Odisha,Chilika Lake,19.6800,85.3900,lake,nature
+Telangana,Telangana,Charminar,17.3616,78.4747,monument,historical
+Telangana,Telangana,Golconda Fort,17.3820,78.4010,fort,historical
+Telangana,Telangana,Ramoji Film City,17.2519,78.6010,film studio,entertainment
+Assam,Assam,Kaziranga National Park,26.6500,93.2000,wildlife,nature
+Assam,Assam,Kamakhya Temple,26.1669,91.7067,temple,religious
+Andaman & Nicobar Islands,Andaman & Nicobar Islands,Radhanagar Beach,12.0167,92.9833,beach,beaches
+Andaman & Nicobar Islands,Andaman & Nicobar Islands,Cellular Jail,11.6967,92.7483,historical,historical
+Andaman & Nicobar Islands,Andaman & Nicobar Islands,Havelock Island,12.0833,93.0000,island,beaches
+Bihar,Bihar,Bodh Gaya,24.6974,84.9922,pilgrimage,religious
+Bihar,Bihar,Mahabodhi Temple,24.6957,84.9904,temple,religious

@@ -1,0 +1,10 @@
+streamlit
+pandas
+requests
+wikipedia-api
+Pillow
+plotly
+openai
+streamlit-folium
+folium
+streamlit-option-menu
