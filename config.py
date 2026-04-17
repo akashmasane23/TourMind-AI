@@ -1,79 +1,151 @@
 """
-Configuration file - Uses Streamlit secrets for API keys
-TourMind Pro - Secure Configuration
+TourMind AI — Configuration
+All app-wide constants, settings, and API key loading live here.
+
+Improvements:
+  - API key loader checks ALL locations every utils file uses:
+      st.secrets["KEY"], st.secrets["api_keys"]["KEY"], os.getenv("KEY")
+  - Consistent key names (uppercase) across secrets + env
+  - check_api_keys() / get_missing_keys() updated to include OpenAI
+  - Cache TTLs, limits, and constants grouped clearly
+  - Removed redundant fallback strings that masked misconfiguration
 """
+
+import os
 import streamlit as st
 
 # ============================================
 # SECURE API KEY LOADING
 # ============================================
 
-def get_api_key(secret_path, fallback=""):
+def _load_key(
+    flat_name: str,
+    nested_name: str | None = None,
+    env_name: str | None = None,
+    fallback: str = "",
+) -> str:
     """
-    Load API key from Streamlit secrets
-    Falls back to placeholder if secrets not found
+    Universal key loader — checks in order:
+      1. st.secrets["FLAT_NAME"]
+      2. st.secrets["api_keys"]["NESTED_NAME"]   (if nested_name provided)
+      3. os.environ["ENV_NAME"]                  (if env_name provided)
+      4. fallback string
+
+    This matches the lookup order used in every utils file.
     """
     try:
-        keys = st.secrets
-        for key in secret_path.split("."):
-            keys = keys[key]
-        return keys
-    except (KeyError, FileNotFoundError, AttributeError):
-        return fallback
+        if flat_name in st.secrets:
+            return st.secrets[flat_name]
+    except Exception:
+        pass
 
-# Load API keys from secrets.toml
-UNSPLASH_ACCESS_KEY = get_api_key("api_keys.unsplash_access_key", "YOUR_UNSPLASH_ACCESS_KEY")
-OPENWEATHER_API_KEY = get_api_key("api_keys.openweather_api_key", "YOUR_OPENWEATHER_API_KEY")
-OPENAI_API_KEY = get_api_key("api_keys.openai_api_key", "")
+    try:
+        if nested_name and "api_keys" in st.secrets:
+            val = st.secrets["api_keys"].get(nested_name)
+            if val:
+                return val
+    except Exception:
+        pass
+
+    if env_name:
+        val = os.getenv(env_name)
+        if val:
+            return val
+
+    return fallback
+
+
+# Load all keys
+UNSPLASH_ACCESS_KEY = _load_key(
+    "UNSPLASH_ACCESS_KEY",
+    nested_name="unsplash_access_key",
+    env_name="UNSPLASH_ACCESS_KEY",
+    fallback="YOUR_UNSPLASH_ACCESS_KEY",
+)
+
+OPENWEATHER_API_KEY = _load_key(
+    "OPENWEATHER_API_KEY",
+    nested_name="openweather_api_key",
+    env_name="OPENWEATHER_API_KEY",
+    fallback="YOUR_OPENWEATHER_API_KEY",
+)
+
+OPENAI_API_KEY = _load_key(
+    "OPENAI_API_KEY",
+    nested_name="openai_api_key",
+    env_name="OPENAI_API_KEY",
+    fallback="",
+)
+
+GOOGLE_PLACES_API_KEY = _load_key(
+    "GOOGLE_PLACES_API_KEY",
+    nested_name="google_places_api_key",
+    env_name="GOOGLE_PLACES_API_KEY",
+    fallback="",
+)
+
+GOOGLE_SHEET_URL = _load_key(
+    "GOOGLE_SHEET_URL",
+    env_name="GOOGLE_SHEET_URL",
+    fallback="",
+)
 
 # ============================================
 # API ENDPOINTS
 # ============================================
 
-UNSPLASH_API_URL = "https://api.unsplash.com/search/photos"
+UNSPLASH_API_URL    = "https://api.unsplash.com/search/photos"
 OPENWEATHER_API_URL = "https://api.openweathermap.org/data/2.5"
 
 # ============================================
 # APP SETTINGS
 # ============================================
 
-APP_TITLE = "TourMind Pro"
-APP_ICON = "🌍"
-APP_VERSION = "1.0.0"
-DEFAULT_RESULTS_LIMIT = 5
+APP_TITLE            = "TourMind AI"
+APP_ICON             = "🌍"
+APP_VERSION          = "2.0.0"
+DEFAULT_RESULTS_LIMIT = 10
 
 # ============================================
-# WIKIPEDIA SETTINGS
+# CACHE TTLs (seconds)
 # ============================================
 
-WIKI_USER_AGENT = "TourMindPro/1.0 (tourmind@example.com)"
-WIKI_LANGUAGE = "en"
+CACHE_TTL_SHORT  = 1800    # 30 min  — weather, live crowd
+CACHE_TTL_MEDIUM = 3600    # 1 hour  — places, peak hours
+CACHE_TTL_LONG   = 86400   # 24 hrs  — Wikipedia, Unsplash images
 
 # ============================================
-# TIME SLOTS FOR PEAK HOURS
+# WIKIPEDIA
+# ============================================
+
+WIKI_USER_AGENT = "TourMindAI/2.0 (tourmind@example.com)"
+WIKI_LANGUAGE   = "en"
+
+# ============================================
+# TIME SLOTS
 # ============================================
 
 TIME_SLOTS = [
-    "Early Morning (5-8 AM)", 
-    "Morning (8-11 AM)", 
-    "Afternoon (11-2 PM)", 
-    "Evening (2-6 PM)", 
-    "Night (6-10 PM)"
+    "Early Morning (5–8 AM)",
+    "Morning (8–11 AM)",
+    "Afternoon (11 AM–2 PM)",
+    "Evening (2–6 PM)",
+    "Night (6–10 PM)",
 ]
 
 # ============================================
-# TRIP TYPES AND PREFERENCES
+# TRIP TYPES & PREFERENCES
 # ============================================
 
 TRIP_TYPES = [
     "Relaxation",
-    "Adventure", 
+    "Adventure",
     "Cultural",
     "Family",
     "Solo",
     "Romantic",
     "Business",
-    "Spiritual"
+    "Spiritual",
 ]
 
 TRAVEL_PREFERENCES = [
@@ -88,146 +160,208 @@ TRAVEL_PREFERENCES = [
     "Spiritual",
     "Architecture",
     "Museums",
-    "Adventure Sports"
+    "Adventure Sports",
 ]
 
 # ============================================
-# RATING CONFIGURATION
+# RATINGS
 # ============================================
 
 MIN_RATING = 1
 MAX_RATING = 5
 RATING_LABELS = {
     1: "😞 Poor",
-    2: "😐 Fair",
-    3: "🙂 Good",
+    2: "😕 Fair",
+    3: "😐 Good",
     4: "😊 Very Good",
-    5: "😍 Excellent"
+    5: "🤩 Excellent",
 }
 
 # ============================================
-# MAP CONFIGURATION
+# MAP
 # ============================================
 
 DEFAULT_MAP_ZOOM = 12
-MAP_TILE_STYLE = "OpenStreetMap"
+MAP_TILE_STYLE   = "OpenStreetMap"
 
 # ============================================
-# CHATBOT RESPONSES (RULE-BASED)
+# IMAGE SIZES
+# ============================================
+
+IMAGE_WIDTH      = 800
+IMAGE_HEIGHT     = 600
+THUMBNAIL_WIDTH  = 400
+THUMBNAIL_HEIGHT = 300
+ITEMS_PER_PAGE   = 10
+
+# ============================================
+# RULE-BASED CHATBOT KEYWORDS
+# (used as fallback when OpenAI is unavailable)
 # ============================================
 
 CHATBOT_KEYWORDS = {
-    "weather": "I can help you check the weather! 🌤️ Go to the 'Destination Info' page and enter a city name to see current weather and 5-day forecasts.",
-    
-    "itinerary": "Planning a trip? 🗓️ Visit the 'Itinerary Planner' page and enter your destination, number of days, and travel preferences. I'll create a personalized day-by-day plan for you!",
-    
-    "place": "Looking for tourist places? 🏖️ Head to the 'Place Recommendations' page. Search by city or state to discover amazing destinations with photos and details!",
-    
-    "review": "Want to see reviews? ⭐ Check the 'Reviews and Ratings' page to read experiences from other travelers or leave your own review and rating.",
-    
-    "peak": "To find the best time to visit a place ⏰ go to the 'Peak Hours & Nearby' page. You'll see best visiting times, times to avoid crowds, peak seasons, and nearby attractions.",
-    
-    "hello": "Hello! 👋 I'm your TourMind assistant. How can I help you plan your perfect trip today? Ask me about places, weather, itineraries, reviews, or best visiting times!",
-    
-    "help": "I can assist with: 🏖️ Finding tourist places | 🗓️ Planning itineraries | 🌤️ Checking weather | ⭐ Reading reviews | ⏰ Best visiting times | 💬 Travel tips. What would you like to know?",
-    
-    "thanks": "You're welcome! 😊 Happy to help with your travel plans! Have a wonderful trip! 🌍✈️"
+    "weather": (
+        "I can help with weather! 🌤️ Go to **Destination Info** and enter "
+        "a city name to see current conditions and a 5-day forecast."
+    ),
+    "itinerary": (
+        "Planning a trip? 🗓️ Visit **Itinerary Planner**, enter your destination, "
+        "duration, and preferences — I'll generate a day-by-day plan for you!"
+    ),
+    "place": (
+        "Looking for places? 🏖️ Head to **Place Recommendations** and search "
+        "by city or state to discover top destinations with photos."
+    ),
+    "review": (
+        "For reviews ⭐ check the **Reviews & Ratings** page — read fellow "
+        "travellers' experiences or leave your own."
+    ),
+    "peak hours": (
+        "Find the best visiting times ⏰ on the **Peak Hours & Nearby** page — "
+        "see crowd levels, optimal timing, and nearby attractions."
+    ),
+    "nearby": (
+        "Discover nearby attractions 📍 on the **Peak Hours & Nearby** page. "
+        "Search for a place and we'll show what's close by!"
+    ),
+    "budget": (
+        "For budget tips 💰 use the **Itinerary Planner** — it includes an "
+        "estimated cost breakdown per person for your trip."
+    ),
+    "food": (
+        "Hungry for local flavours? 🍜 Use the **Itinerary Planner** with "
+        "'Food Tours' in preferences — I'll include restaurant & street food tips."
+    ),
+    "hello": (
+        "Hello! 👋 I'm your TourMind assistant. Ask me about places, "
+        "weather, itineraries, reviews, or the best times to visit!"
+    ),
+    "hi": (
+        "Hi there! 🌿 Ready to plan your next adventure? Ask me anything "
+        "about destinations across India!"
+    ),
+    "help": (
+        "I can assist with:\n"
+        "🏖️ Finding tourist places\n"
+        "🗓️ Planning itineraries\n"
+        "🌤️ Checking weather\n"
+        "⭐ Reading & writing reviews\n"
+        "⏰ Best visiting times & crowd levels\n"
+        "💬 General travel tips\n\n"
+        "What would you like help with?"
+    ),
+    "thanks": (
+        "You're welcome! 😊 Happy travels and have a wonderful trip! 🌍✈️"
+    ),
 }
 
-DEFAULT_CHATBOT_RESPONSE = "I'm here to help with your travel planning! 🌍 Try asking about weather forecasts, places to visit, trip itineraries, user reviews, or best times to visit attractions."
+DEFAULT_CHATBOT_RESPONSE = (
+    "I'm here to help with your travel plans! 🌍 "
+    "Try asking about destinations, weather, itineraries, "
+    "reviews, or the best times to visit an attraction."
+)
 
 # ============================================
-# UI/UX SETTINGS
-# ============================================
-
-IMAGE_WIDTH = 800
-IMAGE_HEIGHT = 600
-THUMBNAIL_WIDTH = 400
-THUMBNAIL_HEIGHT = 300
-
-ITEMS_PER_PAGE = 10
-
-CACHE_TTL_SHORT = 1800   # 30 minutes
-CACHE_TTL_LONG = 3600    # 1 hour
-
-# ============================================
-# ERROR MESSAGES
+# ERROR & SUCCESS MESSAGES
 # ============================================
 
 ERROR_MESSAGES = {
-    "api_key_missing": "⚠️ API key not configured. Please add your API key in .streamlit/secrets.toml",
-    "api_error": "⚠️ API request failed. Please try again later.",
-    "no_results": "😔 No results found. Try a different search term.",
-    "network_error": "🌐 Network error. Please check your connection.",
-    "invalid_input": "❌ Invalid input. Please check your entry and try again."
+    "api_key_missing":  "⚠️ API key not configured. Add it to .streamlit/secrets.toml",
+    "api_error":        "⚠️ API request failed. Please try again later.",
+    "no_results":       "😔 No results found. Try a different search term.",
+    "network_error":    "🌐 Network error. Check your internet connection.",
+    "invalid_input":    "❌ Invalid input. Please check your entry and try again.",
 }
 
 SUCCESS_MESSAGES = {
-    "review_saved": "✅ Thank you! Your review has been submitted successfully.",
+    "review_saved":    "✅ Review submitted successfully. Thank you!",
     "itinerary_saved": "✅ Itinerary saved successfully!",
-    "data_loaded": "✅ Data loaded successfully!"
+    "data_loaded":     "✅ Data loaded successfully!",
 }
 
 HELP_TEXT = {
-    "place_search": "Enter a city or state name to discover tourist attractions. Examples: Goa, Rajasthan, Mumbai",
-    "review_rating": "Rate your experience from 1-5 stars. Be honest and helpful for other travelers!",
-    "itinerary_days": "Select the number of days for your trip (1-14 days)",
-    "weather_forecast": "Enter a city name to see current weather and 5-day forecast",
-    "peak_hours": "Find the best times to visit popular attractions and avoid crowds"
+    "place_search":     "Enter a city or state name — e.g. Goa, Rajasthan, Mumbai",
+    "review_rating":    "Rate 1–5 stars. Be honest and helpful for fellow travellers!",
+    "itinerary_days":   "Select trip duration: 1–14 days",
+    "weather_forecast": "Enter a city name for current weather and 5-day forecast",
+    "peak_hours":       "Find best visiting times and avoid peak crowds",
 }
 
 # ============================================
-# API SETUP INSTRUCTIONS
+# API SETUP GUIDE (shown in UI)
 # ============================================
 
 API_SETUP_INSTRUCTIONS = """
 ### 🔑 How to Get Free API Keys
 
-#### 1. Unsplash API (Images) - Required
+#### 1. Unsplash API (Images)
 - Visit: https://unsplash.com/developers
-- Sign up / Log in
-- Click "New Application"
-- Accept terms and fill in details
-- Copy your Access Key
-- Paste in .streamlit/secrets.toml
+- Create a new application → copy your **Access Key**
 - Free tier: 50 requests/hour
 
-#### 2. OpenWeatherMap API (Weather) - Required
+#### 2. OpenWeatherMap API (Weather)
 - Visit: https://openweathermap.org/appid
-- Sign up / Log in
-- Check email for API key
-- Copy your API key
-- Paste in .streamlit/secrets.toml
-- Free tier: 1000 calls/day
+- Sign up and check email for your **API Key**
+- Free tier: 1,000 calls/day
 
-#### 3. Wikipedia API - No Key Needed ✅
-- Already configured and ready to use!
-
-#### 4. OpenAI API (Chatbot) - Optional
+#### 3. OpenAI API (Chatbot + Itinerary)
 - Visit: https://platform.openai.com/api-keys
-- Note: OPTIONAL - app has free rule-based chatbot
+- Create a new key and add billing
+- Model used: `gpt-4o-mini` (very affordable)
+
+#### 4. Wikipedia API — ✅ No key needed
+
+---
+
+Add all keys to `.streamlit/secrets.toml`:
+
+```toml
+OPENAI_API_KEY       = "sk-..."
+UNSPLASH_ACCESS_KEY  = "your_key"
+OPENWEATHER_API_KEY  = "your_key"
+```
 """
 
 # ============================================
 # HELPER FUNCTIONS
 # ============================================
 
-def check_api_keys():
-    """Check which API keys are configured"""
-    status = {
-        "unsplash": UNSPLASH_ACCESS_KEY != "YOUR_UNSPLASH_ACCESS_KEY" and UNSPLASH_ACCESS_KEY != "",
-        "openweather": OPENWEATHER_API_KEY != "YOUR_OPENWEATHER_API_KEY" and OPENWEATHER_API_KEY != "",
-        "openai": OPENAI_API_KEY != "" and OPENAI_API_KEY != "YOUR_OPENAI_API_KEY",
-        "wikipedia": True  # Always available
-    }
-    return status
+def check_api_keys() -> dict[str, bool]:
+    """Return which API keys are properly configured."""
+    # Check Google Sheets separately (needs both URL + service account)
+    try:
+        sheets_ok = bool(
+            st.secrets.get("gcp_service_account") and
+            st.secrets.get("GOOGLE_SHEET_URL")
+        )
+    except Exception:
+        sheets_ok = False
 
-def get_missing_keys():
-    """Get list of missing API keys"""
-    status = check_api_keys()
+    return {
+        "unsplash":    (
+            bool(UNSPLASH_ACCESS_KEY) and
+            UNSPLASH_ACCESS_KEY not in ("YOUR_UNSPLASH_ACCESS_KEY", "")
+        ),
+        "openweather": (
+            bool(OPENWEATHER_API_KEY) and
+            OPENWEATHER_API_KEY not in ("YOUR_OPENWEATHER_API_KEY", "")
+        ),
+        "openai":      bool(OPENAI_API_KEY),
+        "wikipedia":   True,
+        "sheets":      sheets_ok,
+    }
+
+
+def get_missing_keys() -> list[str]:
+    """Return list of missing (non-configured) API key names."""
+    status  = check_api_keys()
     missing = []
     if not status["unsplash"]:
-        missing.append("Unsplash (for images)")
+        missing.append("Unsplash (destination photos)")
     if not status["openweather"]:
-        missing.append("OpenWeatherMap (for weather)")
+        missing.append("OpenWeatherMap (weather forecasts)")
+    if not status["openai"]:
+        missing.append("OpenAI (AI chatbot & itinerary planner)")
+    if not status["sheets"]:
+        missing.append("Google Sheets (persistent reviews & itineraries)")
     return missing

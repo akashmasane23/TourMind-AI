@@ -1,1 +1,1 @@
-"""Pages package for TourMind Pro"""
+"""Pages package for TourMind AI"""
